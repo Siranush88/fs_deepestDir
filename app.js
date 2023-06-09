@@ -16,11 +16,9 @@ function getLongestPath(dir) {
       fs.readdirSync(dir).map(file => {
         fullPath = path.join(dir, file);
         getPaths(fullPath);
-  
-      });
-      
+      });     
     } 
-    arrPaths.push(fullPath);
+    arrPaths.push(dir);
   }
 
   getPaths(dir);
@@ -38,19 +36,16 @@ function getLongestPath(dir) {
     }
   });
 
-    longestCollection = [...new Set(longestCollection)];
+  longestCollection = [...new Set(longestCollection)];
+
   longestCollectionItem = longestCollection[0];
-
   deepestDirectoriesItem = longestCollectionItem.split(separator);
-  const lastItem = deepestDirectoriesItem[deepestDirectoriesItem.length - 1];
 
-  if(fs.lstatSync(lastItem).isFile()){
+  const lastItem = deepestDirectoriesItem[deepestDirectoriesItem.length - 1];
+  if(fs.lstatSync(lastItem, {throwIfNoEntry: false})?.isFile()){
     deepestDirectoriesItem.splice(-1);
   }
-
   deepestDirectoriesItem = deepestDirectoriesItem.join(separator);
-
-  
 
   const newFile = path.join(deepestDirectoriesItem, 'file.txt');
   fs.writeFile(newFile, 'hello world', function (err, file) {
